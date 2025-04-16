@@ -21,8 +21,6 @@ export const signInWithAzure = async () => {
     return encodedRedirect("error", "/sign-in", error.message);
   }
 
-  console.log("data", data);
-
   return redirect(data.url);
 };
 
