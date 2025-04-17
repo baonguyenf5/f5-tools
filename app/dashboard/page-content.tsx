@@ -18,6 +18,8 @@ export function DashboardPageContent() {
   const whitelistedIP = infoQuery.data?.dns?.content;
 
   const alert = useMemo(() => {
+    if (infoQuery.isFetching || updateMutation.isPending) return undefined;
+
     if (updateMutation.error) {
       return {
         description:
@@ -47,7 +49,14 @@ export function DashboardPageContent() {
       };
     }
     return undefined;
-  }, [infoQuery.error, updateMutation.error, clientIp, whitelistedIP]);
+  }, [
+    clientIp,
+    whitelistedIP,
+    infoQuery.error,
+    updateMutation.error,
+    infoQuery.isFetching,
+    updateMutation.isPending,
+  ]);
 
   return (
     <div className="flex-1 w-full flex flex-col gap-12">
@@ -55,12 +64,14 @@ export function DashboardPageContent() {
         <CardContent>
           <p className="font-bold text-xl mt-4">Your IP Address</p>
           <p className="text-sm font-mono p-3 rounded border">
-            {clientIp || "Loading..."}
+            {infoQuery.isFetching ? "Loading..." : clientIp}
           </p>
-          <Badge variant="secondary">{aName || "Loading..."}</Badge>
+          <Badge variant="secondary">
+            {infoQuery.isFetching ? "Loading..." : aName}
+          </Badge>
           <p className="font-bold text-xl mt-4">Your Whitelisted Address</p>
           <p className="text-sm font-mono p-3 rounded border">
-            {whitelistedIP || "Loading..."}
+            {infoQuery.isFetching ? "Loading..." : whitelistedIP}
           </p>
           {alert?.variant === "error" && (
             <p className="text-sm rounded mt-4 p-2 bg-red-200">
@@ -75,7 +86,7 @@ export function DashboardPageContent() {
           <Button
             onClick={() => updateMutation.mutate({ ip: clientIp || "" })}
             disabled={
-              infoQuery.isLoading ||
+              infoQuery.isFetching ||
               updateMutation.isPending ||
               clientIp === whitelistedIP
             }
