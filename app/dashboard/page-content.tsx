@@ -66,12 +66,12 @@ export function DashboardPageContent() {
           <p className="text-sm font-mono p-3 rounded border">
             {infoQuery.isFetching ? "Loading..." : clientIp}
           </p>
-          <Badge variant="secondary">
-            {infoQuery.isFetching ? "Loading..." : aName}
+          <Badge variant="default">
+            {infoQuery.isFetching ? "Loading..." : aName || "N/A"}
           </Badge>
           <p className="font-bold text-xl mt-4">Your Whitelisted Address</p>
           <p className="text-sm font-mono p-3 rounded border">
-            {infoQuery.isFetching ? "Loading..." : whitelistedIP}
+            {infoQuery.isFetching ? "Loading..." : whitelistedIP || "N/A"}
           </p>
           {alert?.variant === "error" && (
             <p className="text-sm rounded mt-4 p-2 bg-red-200">
